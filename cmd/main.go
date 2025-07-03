@@ -2,14 +2,10 @@ package main
 
 import (
 	"fmt"
-	"sc/internal/repository/otp"
+	"sc/internal/repository/repootp"
 )
 
 func main() {
-
-	err := otp.SendOTP("asdas")
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	
+	x := repootp.NewOTP("hendri@email.com")
+	fmt.Println(x)
 }
