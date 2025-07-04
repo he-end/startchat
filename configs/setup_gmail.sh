@@ -8,9 +8,17 @@ do
     if [ -z $GMAIL_USERNAME ]; then
         echo "please try again"
     fi
-    EMAIL_OK="ok"
+
+    regex='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if [[ $GMAIL_USERNAME =~ $regex ]]; then
+        echo "✅ Email valid"
+        EMAIL_OK="ok"
+    else
+        echo "❌ Email tidak valid"
+    fi
 done
 
+echo " => note : if you have'nt password app, you can open this url https://myaccount.google.com/apppasswords"
 echo -n "[*] input your APP GOOGLE PASSWORD [e.g asdd woeur weif asdn ] : "
 
 pwdOK=""
@@ -51,8 +59,8 @@ CONFIG_FILE=".emailconfig"
 cat > "$CONFIG_FILE" <<EOF
 GMAIL_USERNAME="$GMAIL_USERNAME"
 GMAIL_PASSWORD="${myarr[@]}"
-HOST="smtp.gmail.com"
-PORT="$EMAIL_PORT"
+GMAIL_HOST="smtp.gmail.com"
+GMAIL_PORT="$EMAIL_PORT"
 EOF
 chmod 600 "$CONFIG_FILE"
 
