@@ -34,7 +34,7 @@ func loadDBConfig() (conf DBConf) {
 }
 
 func (conf DBConf) loadDSN() string {
-	// "postgres://postgres:yourpass@localhost:5432/startchat"
+	// "postgres://user_db:yourpass@localhost:5432/name_db"
 	dsn := fmt.Sprintf(
 		"postgres://%v:%v@%v:%v/%v",
 		conf.DBUsername, conf.DBPassword, conf.DBHost, conf.DBPort, conf.DBName)
@@ -44,8 +44,6 @@ func (conf DBConf) loadDSN() string {
 func init() {
 	conf := loadDBConfig()
 	dsn := conf.loadDSN()
-	fmt.Println(dsn)
-	// sql.Register("pgx", stdlib.GetDefaultDriver())
 	var err error
 	DB, err = sql.Open("pgx", dsn)
 	if err != nil {
