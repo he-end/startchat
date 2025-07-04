@@ -1,13 +1,15 @@
 package repootp
 
 import (
-	"log"
 	"math/rand"
+	"sc/internal/internalutils"
+	"sc/internal/logger"
 	modelotp "sc/internal/model/otp"
 	"sc/internal/repository"
-	internalutils "sc/internal/utils"
 	"strconv"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 func generateNewOtp() string {
@@ -18,7 +20,7 @@ func generateNewOtp() string {
 	return otp
 }
 
-func NewOTP(emailOrPhone string) (resOTP modelotp.ResOTP) {
+func NewOTP(emailOrPhone string) (resOTP modelotp.ResOTP, err error) {
 	db := repository.DB
 
 	newOTP := generateNewOtp()
@@ -30,17 +32,23 @@ func NewOTP(emailOrPhone string) (resOTP modelotp.ResOTP) {
 		resOTP.Email = emailOrPhone
 		tx, err := db.Begin()
 		if err != nil {
-			log.Fatal("error load database")
+			logger.Error("error transaction DB", zap.Error(err))
+			return resOTP, err
 		}
-		defer tx.Rollback()
-		_, err = tx.Exec(QueInsertOtpFromEmail, resOTP.Email, resOTP.OTPCode, resOTP.ExpiresAt)
+		_, err = tx.Exec(queInsertOtpFromEmail, resOTP.Email, resOTP.OTPCode, resOTP.ExpiresAt)
 		if err != nil {
 			tx.Rollback()
-			log.Fatal(err.Error())
+			logger.Error("error insert into otp_request", zap.String("email", resOTP.Email), zap.Error(err))
+			return resOTP, err
 		}
-		tx.Commit()
+		if err := tx.Commit(); err != nil {
+			logger.Error("failed to commit transaction", zap.String("email", resOTP.Email))
+			return resOTP, err
+		}
 	} else {
 		resOTP.Phone = emailOrPhone
+		// TODO: handle phone-based OTP in future
+
 	}
 	return
 }
