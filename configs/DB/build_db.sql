@@ -78,3 +78,23 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- sample unactivade account
 -- UPDATE public.users set is_active = FALSE WHERE email = 'user@example.com';
+-- ==============================================================
+-- =====================                    =====================
+-- =====================    PENDING USER    ===================== 
+-- =====================                    =====================
+-- ==============================================================
+CREATE TABLE IF NOT EXISTS pending_users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL UNIQUE,
+    ip_address TEXT NOT NULL,
+    token TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    expires_at TIMESTAMPTZ NOT NULL
+);
+-- sample insert
+INSERT INTO pending_users (email, ip_address, token, expires_at) VALUES ('hend@testasd.com', '12.123.123.123', 'hashtoken', NOW() + INTERVAL '5 minutes');
+-- sample get pending_users
+select * from pending_users where email = 'hend@testasd.com' and ip_address = '12.123.123.123' and token = 'hashtoken';
+-- sample delete
+-- DELETE from pending_users where email = 'hend@testasd.com' and ip_address = '12.123.123.123' and token = 'hashtoken';
+-- DELETE from pending_users where id = '635d23a9-1276-4377-ab1e-b27012d99ad4';

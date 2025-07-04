@@ -1,7 +1,7 @@
-package http
+package httphandler
 
 type BaseResponseError struct {
-	Code        int         `json:"code"`
+	Code   int         `json:"code"`
 	ErrorDetail interface{} `json:"error_detail"`
 }
 
