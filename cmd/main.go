@@ -1,8 +1,14 @@
 package main
 
 import (
+	"log"
+	"net/http"
+	"sc/internal/handler/http/register"
 	"sc/internal/logger"
-	serviceotp "sc/internal/service/otp"
+	mdwlogger "sc/internal/middleware/logger"
+	mdwratelimiter "sc/internal/middleware/ratelimiter"
+	"sc/internal/router"
+	"time"
 )
 
 func main() {
@@ -16,26 +22,25 @@ func main() {
 		MinimumLogLevel: "debug",
 	})
 	defer logger.Log.Sync()
+	r := router.New()
+	apiEndpoint(r)
+	wrapped := Middleware(r)
 
-	// mail := "test123@test.com"
-	// fmt.Println("=> generate new otp")
-	// newOtp, _ := repootp.NewOTP(mail)
-	// if len(newOtp.Email) < 1 {
-	// 	log.Fatal()
-	// }
-	// fmt.Println("=> wait for a second")
-	// time.Sleep(time.Second * 2)
-	// fmt.Println("=> test matching")
-	// ok, err := serviceotp.VerifyOtp(mail, newOtp.OTPCode)
-	// if !ok {
-	// 	if err != nil {
-	// 		logger.Error("error mathing otp", zap.Error(err))
-	// 		return
-	// 	}
-	// 	logger.Error("otp not match", zap.String("otp", newOtp.OTPCode))
-	// 	return
-	// }
-	// fmt.Println("otp match")
+	log.Println("server run in localhost:8080")
+	http.ListenAndServe(":8080", wrapped)
 
-	serviceotp.SendOTPWithGmail("1010101", "hendri41234@gmail.com")
+}
+
+func apiEndpoint(router *router.Router) {
+	router.Handle("POST", "/api/v0.1/register", register.ResgisterHandler)
+}
+func Middleware(router http.Handler) http.Handler {
+	baseRL := mdwratelimiter.NewRateLimiter(60, time.Minute*1)
+
+	var handler http.Handler = router
+
+	handler = mdwlogger.MiddlewareReqID(handler)      // middleware for autogenerate request_id
+	handler = baseRL.MiddelwareBaseRateLimit(handler) // middelware rate limit
+
+	return handler
 }
