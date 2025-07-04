@@ -1,7 +1,6 @@
-package service
+package serviceemail
 
-
-// func SendEmail(to []string, subject string, body string) (ok bool) {
+// func SendEmailWithGmail(to []string, subject string, body string) (ok bool) {
 // 	require := utils.Utils.EmailConf
 
 // 	auth := smtp.PlainAuth("", require.Username, require.Password, require.Host)

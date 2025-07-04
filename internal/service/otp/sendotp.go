@@ -1,4 +1,4 @@
- package service
+ package serviceotp
 
 
  func SendOTPWithGmail(otpCode, email string)error{
