@@ -1,8 +1,8 @@
 package http
 
 type BaseResponseError struct {
-	Code   int         `json:"code"`
-	Detail interface{} `json:"message"`
+	Code        int         `json:"code"`
+	ErrorDetail interface{} `json:"error_detail"`
 }
 
 type BaseResponseSuccess struct {
