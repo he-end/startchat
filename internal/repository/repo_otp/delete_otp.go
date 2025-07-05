@@ -1,8 +1,8 @@
 package repootp
 
 import (
-	"sc/internal/logger"
-	"sc/internal/repository"
+	"github.com/hend41234/startchat/internal/logger"
+	"github.com/hend41234/startchat/internal/repository"
 
 	"go.uber.org/zap"
 )

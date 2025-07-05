@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	httphandler "sc/internal/handler/http"
-	"sc/internal/internalutils"
+	httphandler "github.com/hend41234/startchat/internal/handler/http"
+	"github.com/hend41234/startchat/internal/internalutils"
 )
 
 // verify OTP, POST Method

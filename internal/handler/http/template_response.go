@@ -2,7 +2,8 @@ package httphandler
 
 import (
 	"encoding/json"
-	"sc/internal/logger"
+
+	"github.com/hend41234/startchat/internal/logger"
 
 	"go.uber.org/zap"
 )

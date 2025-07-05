@@ -1,8 +1,9 @@
 package repopendingusers
 
 import (
-	"sc/internal/repository"
 	"time"
+
+	"github.com/hend41234/startchat/internal/repository"
 )
 
 func AddPendingUser(email, password, ipAddress, token string) error {

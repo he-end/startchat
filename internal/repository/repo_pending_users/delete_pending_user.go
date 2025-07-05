@@ -1,6 +1,6 @@
 package repopendingusers
 
-import "sc/internal/repository"
+import "github.com/hend41234/startchat/internal/repository"
 
 func DeletePendingUsers(email, token string) error {
 	tx, err := repository.DB.Begin()

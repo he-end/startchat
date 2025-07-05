@@ -3,8 +3,9 @@ package serviceotp
 import (
 	"errors"
 	"log"
-	"sc/internal/repository/repootp"
 	"time"
+
+	repootp "github.com/hend41234/startchat/internal/repository/repo_otp"
 )
 
 func VerifyOtp(email, otpCode, token string) (bool, error) {

@@ -3,8 +3,9 @@ package serviceotp
 import (
 	"errors"
 	"fmt"
-	"sc/internal/logger"
-	serviceemail "sc/internal/service/email"
+
+	"github.com/hend41234/startchat/internal/logger"
+	serviceemail "github.com/hend41234/startchat/internal/service/email"
 
 	"go.uber.org/zap"
 )

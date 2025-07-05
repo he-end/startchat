@@ -3,7 +3,8 @@ package logger
 import (
 	"log"
 	"os"
-	"sc/internal/internalutils"
+
+	"github.com/hend41234/startchat/internal/internalutils"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

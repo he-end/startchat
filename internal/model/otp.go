@@ -1,8 +1,9 @@
 package model
 
 import (
-	"sc/internal/repository"
 	"time"
+
+	"github.com/hend41234/startchat/internal/repository"
 )
 
 type OTP struct {

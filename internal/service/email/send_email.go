@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net/smtp"
 	"os"
-	"sc/internal/logger"
+
+	"github.com/hend41234/startchat/internal/logger"
 
 	"github.com/joho/godotenv"
 )

@@ -1,8 +1,8 @@
 package repootp
 
 import (
-	"sc/internal/logger"
-	"sc/internal/repository"
+	"github.com/hend41234/startchat/internal/logger"
+	"github.com/hend41234/startchat/internal/repository"
 
 	"go.uber.org/zap"
 )
@@ -21,7 +21,7 @@ func UpdateStatusVeify(email, otpCode string) bool {
 		tx.Rollback()
 		return false
 	}
-	
+
 	rows, _ := res.RowsAffected()
 	if rows == 0 {
 		logger.Info("update success but no user found", zap.String("email", email))

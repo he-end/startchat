@@ -2,9 +2,10 @@ package mdwratelimiter
 
 import (
 	"net/http"
-	"sc/internal/internalutils"
-	"sc/internal/logger"
 	"time"
+
+	"github.com/hend41234/startchat/internal/internalutils"
+	"github.com/hend41234/startchat/internal/logger"
 
 	"go.uber.org/zap"
 )

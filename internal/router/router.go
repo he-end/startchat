@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"sc/internal/logger"
+
+	"github.com/hend41234/startchat/internal/logger"
 
 	"go.uber.org/zap"
 )

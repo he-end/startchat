@@ -2,7 +2,8 @@ package logger
 
 import (
 	"context"
-	mdwlogger "sc/internal/middleware/logger"
+
+	mdwlogger "github.com/hend41234/startchat/internal/middleware/logger"
 
 	"go.uber.org/zap"
 )

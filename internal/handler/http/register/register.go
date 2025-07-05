@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	authpassword "sc/internal/auth/passwords"
-	httphandler "sc/internal/handler/http"
-	"sc/internal/internalutils"
-	"sc/internal/logger"
-	mdwlogger "sc/internal/middleware/logger"
-	"sc/internal/repository/repootp"
-	serviceotp "sc/internal/service/otp"
-	serviceuser "sc/internal/service/user"
+
+	authpassword "github.com/hend41234/startchat/internal/auth/passwords"
+	httphandler "github.com/hend41234/startchat/internal/handler/http"
+	"github.com/hend41234/startchat/internal/internalutils"
+	"github.com/hend41234/startchat/internal/logger"
+	mdwlogger "github.com/hend41234/startchat/internal/middleware/logger"
+	repootp "github.com/hend41234/startchat/internal/repository/repo_otp"
+	serviceotp "github.com/hend41234/startchat/internal/service/otp"
+	serviceuser "github.com/hend41234/startchat/internal/service/user"
 
 	"go.uber.org/zap"
 )

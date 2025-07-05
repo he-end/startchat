@@ -3,13 +3,14 @@ package main
 import (
 	"log"
 	"net/http"
-	"sc/internal/handler/http/otp"
-	"sc/internal/handler/http/register"
-	"sc/internal/logger"
-	mdwlogger "sc/internal/middleware/logger"
-	mdwratelimiter "sc/internal/middleware/ratelimiter"
-	"sc/internal/router"
 	"time"
+
+	"github.com/hend41234/startchat/internal/handler/http/otp"
+	"github.com/hend41234/startchat/internal/handler/http/register"
+	"github.com/hend41234/startchat/internal/logger"
+	mdwlogger "github.com/hend41234/startchat/internal/middleware/logger"
+	mdwratelimiter "github.com/hend41234/startchat/internal/middleware/ratelimiter"
+	"github.com/hend41234/startchat/internal/router"
 )
 
 func main() {
