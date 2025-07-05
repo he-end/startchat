@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"sc/internal/handler/http/otp"
 	"sc/internal/handler/http/register"
 	"sc/internal/logger"
 	mdwlogger "sc/internal/middleware/logger"
@@ -33,6 +34,7 @@ func main() {
 
 func apiEndpoint(router *router.Router) {
 	router.Handle("POST", "/api/v0.1/register", register.ResgisterHandler)
+	router.Handle("POST", "/api/v0.1/verify/otp", otp.VerifyOTPHandler)
 }
 func Middleware(router http.Handler) http.Handler {
 	baseRL := mdwratelimiter.NewRateLimiter(60, time.Minute*1)

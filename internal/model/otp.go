@@ -1,4 +1,4 @@
-package modelotp
+package model
 
 import (
 	"sc/internal/repository"
@@ -16,14 +16,14 @@ type OTP struct {
 	UpdatedAt time.Time             `json:"updated_at"`
 }
 
-type ReqOTP struct {
-	Email string `json:"email,omitempty"`
-	Phone string `json:"phone,omitempty"`
-}
+// type ReqOTP struct {
+// 	Email string `json:"email,omitempty"`
+// 	Phone string `json:"phone,omitempty"`
+// }
 
-type ResOTP struct {
-	OTPCode   string    `json:"otp_code"`
-	Email     string    `json:"email,omitempty"`
-	Phone     string    `json:"phone,omitempty"`
-	ExpiresAt time.Time `json:"expires_at"`
-}
+// type ResOTP struct {
+// 	OTPCode   string    `json:"otp_code"`
+// 	Email     string    `json:"email,omitempty"`
+// 	Phone     string    `json:"phone,omitempty"`
+// 	ExpiresAt time.Time `json:"expires_at"`
+// }

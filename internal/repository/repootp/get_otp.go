@@ -5,13 +5,13 @@ import (
 	"errors"
 	"sc/internal/internalutils"
 	"sc/internal/logger"
-	modelotp "sc/internal/model/otp"
+	"sc/internal/model"
 	"sc/internal/repository"
 
 	"go.uber.org/zap"
 )
 
-func GetOtp(emailOrPhone string) (result modelotp.OTP, err error) {
+func GetOtp(emailOrPhone string) (result model.OTP, err error) {
 	db := repository.DB
 	tx, err := db.Begin()
 	if err != nil {

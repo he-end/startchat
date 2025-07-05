@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func VerifiedOtp(email, otpCode string) bool {
+func UpdateStatusVeify(email, otpCode string) bool {
 	tx, err := repository.DB.Begin()
 	if err != nil {
 		// log.Println("error start transaction : ", err.Error())
@@ -21,6 +21,7 @@ func VerifiedOtp(email, otpCode string) bool {
 		tx.Rollback()
 		return false
 	}
+	
 	rows, _ := res.RowsAffected()
 	if rows == 0 {
 		logger.Info("update success but no user found", zap.String("email", email))

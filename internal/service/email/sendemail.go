@@ -1,7 +1,6 @@
 package serviceemail
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/smtp"
 	"os"
@@ -12,11 +11,8 @@ import (
 
 func SendEmailWithGmail(to []string, subject string, body string) (ok bool) {
 	auth := smtp.PlainAuth("", conf.Username, conf.Password, conf.Host)
+
 	// set recipient
-	{
-		x, _ := json.Marshal(conf)
-		fmt.Println(string(x))
-	}
 	// ========== plain/text
 	// headerSet := fmt.Sprintf("To: %v\r\nSubject: %v\r\n%v\r\n", to[0], subject, body)
 
@@ -26,13 +22,11 @@ func SendEmailWithGmail(to []string, subject string, body string) (ok bool) {
 		to[0], subject, body,
 	)
 	msg := []byte(headerSet)
-	fmt.Println("process sending")
 	err := smtp.SendMail(conf.Host+":"+conf.Port, auth, conf.Username, to, msg)
 	if err != nil {
 		fmt.Println("error : ", err.Error())
 		return false
 	}
-	fmt.Println("success")
 	return true
 }
 
