@@ -1,6 +1,8 @@
-package otp
+package dto
 
-import "time"
+import (
+	"time"
+)
 
 type ReqVerifyOTPModel struct {
 	Otp           string `json:"otp"`

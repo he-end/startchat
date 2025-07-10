@@ -2,8 +2,12 @@ package otp
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"net/http"
+
+	"github.com/go-playground/validator/v10"
+	authvalidator "github.com/hend41234/startchat/internal/auth/validator"
+	"github.com/hend41234/startchat/internal/dto"
 	httphandler "github.com/hend41234/startchat/internal/handler/http"
 	"github.com/hend41234/startchat/internal/internalutils"
 )
@@ -11,7 +15,7 @@ import (
 // verify OTP, POST Method
 func VerifyOTPHandler(w http.ResponseWriter, r *http.Request) {
 	// ctx := logger.FromContext(r.Context())
-	var reqModel ReqVerifyOTPModel
+	var reqModel dto.ReqVerifyOTPModel
 	err := json.NewDecoder(r.Body).Decode(&reqModel)
 	if err != nil {
 		resErr := httphandler.TemplateResErr(http.StatusOK, "otp, token_register is required")
@@ -29,9 +33,25 @@ func VerifyOTPHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(ipClient, reqModel.Otp, reqModel.TokenRegister)
+	{
+		// validate input
+		err := authvalidator.Validate.Struct(reqModel)
+		if err != nil {
+			var invalidValidationErr *validator.InvalidValidationError
+			if errors.As(err, &invalidValidationErr) {
+				resErr := httphandler.TemplateResErr(http.StatusInternalServerError, "something went wrong, please try again later")
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write(resErr)
+				return
+			}
+			authvalidator.ValidationError(err, r.Context())
+			resErr := httphandler.TemplateResErr(http.StatusOK, "make sure data is correct, please check your data")
+			w.Write(resErr)
+			return
+		}
+	}
 
-	res := httphandler.BaseResponseSuccess{Code: http.StatusOK, Data: "success"}
+	res := httphandler.BaseResponseSuccess{Code: http.StatusOK, Data: "success, please login"}
 	byteRes, _ := json.Marshal(res)
 	w.Write(byteRes)
 }

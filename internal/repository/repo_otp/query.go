@@ -20,4 +20,5 @@ const (
 	queVerifiedOtpFromEmail = "update otp_requests set verified = TRUE where email = $1 and otp_code = $2"
 	// email
 	// queVerifiedOtpFromPhone = "update otp_requests set verified = TRUE where phone = $1"
+	queExistOtpOrder = "select exists ( select email from otp_requests where email = $1);"
 )

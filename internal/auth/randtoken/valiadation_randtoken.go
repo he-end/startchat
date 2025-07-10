@@ -7,3 +7,7 @@ package authrandtoken
 // 	}
 // 	return true
 // }
+
+// func RandTokenValid(randToken string)bool{
+// 	stockToken :=
+// }

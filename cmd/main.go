@@ -16,7 +16,7 @@ import (
 func main() {
 	logger.Init(logger.Config{
 		Environment:     "production",
-		LogToConsole:    true,
+		LogToConsole:    false,
 		LogToFile:       true,
 		LogToRemote:     false,
 		EnableRolling:   true, // rolling log aktif
@@ -35,8 +35,9 @@ func main() {
 
 func apiEndpoint(router *router.Router) {
 	router.Handle("POST", "/api/v0.1/register", register.ResgisterHandler)
-	router.Handle("POST", "/api/v0.1/verify/otp", otp.VerifyOTPHandler)
+	router.Handle("POST", "/api/v0.1/otp/verify", otp.VerifyOTPHandler)
 }
+
 func Middleware(router http.Handler) http.Handler {
 	baseRL := mdwratelimiter.NewRateLimiter(60, time.Minute*1)
 

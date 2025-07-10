@@ -17,7 +17,7 @@ func MiddlewareReqID(next http.Handler) http.Handler {
 		if reqID == "" {
 			reqID = uuid.New().String()
 		}
-
+		
 		ctx := context.WithValue(r.Context(), RequestIDKey, reqID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

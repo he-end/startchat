@@ -1,7 +1,7 @@
-package register
+package dto
 
 type ReqRegisterModel struct {
-	Email           string `json:"email"`
+	Email           string `json:"email" validate:"required,email"`
 	Password        string `json:"password"`
 	ConfirmPassword string `json:"confirm_password"`
 }

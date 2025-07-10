@@ -53,3 +53,4 @@ func NewOTP(emailOrPhone string) (result model.OTP, err error) {
 	}
 	return
 }
+
