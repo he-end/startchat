@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/hend41234/startchat/internal/dto"
@@ -16,7 +18,19 @@ var Validate *validator.Validate
 
 func init() {
 	Validate = validator.New()
+	Validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
+		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+		if name == "-" {
+			return ""
+		}
+		return name
+	})
 
+	// ========================= field validator register =========================
+	// [*] registery otp purpose
+	Validate.RegisterValidation("otp_purpose", OtpPurposeValidation)
+
+	// struct validator register
 	Validate.RegisterStructValidation(ValidatorOTPRequest, dto.ReqVerifyOTPModel{})
 	Validate.RegisterStructValidation(ValidatorRegister, dto.ReqRegisterModel{})
 }
@@ -35,10 +49,10 @@ type validationError struct {
 	Message         string `json:"message"`
 }
 
-func ValidationError(err error, rctx context.Context) {
+func ValidationError(err error, rctx context.Context) []map[string]string {
 	var validateErrs validator.ValidationErrors
 	ctx := logger.FromContext(rctx)
-
+	resErr := []map[string]string{}
 	if errors.As(err, &validateErrs) {
 		for _, err := range validateErrs {
 			e := validationError{
@@ -54,7 +68,10 @@ func ValidationError(err error, rctx context.Context) {
 				Param:           err.Param(),
 				Message:         err.Error(),
 			}
-
+			var errField = map[string]string{}
+			errField["field"] = e.StructField
+			errField["tag"] = e.ActualTag
+			resErr = append(resErr, errField)
 			// indent, err := json.MarshalIndent(e, "", "  ")
 			// if err != nil {
 			// 	fmt.Println(err)
@@ -64,4 +81,5 @@ func ValidationError(err error, rctx context.Context) {
 			ctx.Debug("validation error", zap.ByteString(e.Field, erByte))
 		}
 	}
+	return resErr
 }

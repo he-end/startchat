@@ -1,21 +1,19 @@
 package repopendingusers
 
 import (
-	"time"
-
 	"github.com/hend41234/startchat/internal/repository"
 )
 
-func AddPendingUser(email, password, token string) error {
+func UpdateStatusPending(token string) (bool, error) {
 	tx, err := repository.DB.Begin()
 	if err != nil {
-		return err
+		return false, err
 	}
-	_, err = tx.Exec(queAddPendingUser, email, password, token, time.Now().Add(time.Minute*30))
+	_, err = tx.Exec(queUpdateStatusPending, token)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return false, err
 	}
 	defer tx.Commit()
-	return nil
+	return true, nil
 }

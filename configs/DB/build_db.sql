@@ -7,19 +7,23 @@
 -- ==============================================================
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+CREATE TYPE otp_purpose as ENUM ('login', 'register','forgot_password','delete_account'); -- you can add something for purpose otp
+
 CREATE TABLE IF NOT EXISTS otp_requests (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
     email TEXT,
     phone TEXT,
 
+    purpose otp_purpose NOT NULL DEFAULT 'login', -- tambahkan tujuan OTP (optional tapi bagus)
     otp_code TEXT NOT NULL,
+
     expires_at TIMESTAMPTZ NOT NULL,
     verified BOOLEAN NOT NULL DEFAULT FALSE,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
+    verified_at TIMESTAMPTZ,
+    
     CHECK (
         (email IS NOT NULL AND phone IS NULL)
         OR
@@ -27,26 +31,21 @@ CREATE TABLE IF NOT EXISTS otp_requests (
     )
 );
 
--- Partial unique index untuk email
-CREATE UNIQUE INDEX IF NOT EXISTS uniq_otp_email
-ON otp_requests(email)
-WHERE email IS NOT NULL;
 
--- Partial unique index untuk phone
-CREATE UNIQUE INDEX IF NOT EXISTS uniq_otp_phone
-ON otp_requests(phone)
-WHERE phone IS NOT NULL;
 
 -- sample insert
--- INSERT INTO otp_requests (email, otp_code, expires_at) VALUES ('user@example.com', 'bcrypt-otp', NOW() + INTERVAL '5 minutes');
+INSERT INTO otp_requests (email, otp_code, purpose, expires_at) VALUES ('user@example.com', 'bcrypt-otp','register', NOW() + INTERVAL '5 minutes');
 
 -- sample delete
 -- DELETE from otp_requests WHERE email = 'user@example.com';
 
--- verify true
--- UPDATE public.otp_requests set verified = TRUE WHERE email = 'user@example.com';
+-- check rate limit insert
+-- select count(*) from otp_requests where email = 'user@example.com' and created_at > now() - INTERVAL '5 minute';
 
-
+-- sample verify true
+-- UPDATE public.otp_requests set verified = TRUE, verified_at = NOW() WHERE email = 'user@example.com' and otp_code = '123456';
+-- sample get otp
+-- SELECT * from otp_requests where email = 'hend41234@proton.me' and purpose = 'register' ORDER BY created_at DESC limit 1;
 
 
 -- ==============================================================
@@ -87,15 +86,20 @@ CREATE TABLE IF NOT EXISTS pending_users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    ip_address TEXT NOT NULL,
     token TEXT NOT NULL UNIQUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    expires_at TIMESTAMPTZ NOT NULL
+    expires_at TIMESTAMPTZ NOT NULL,
+    verified BOOLEAN NOT NULL DEFAULT FALSE
 );
+-- create index
+CREATE INDEX IF NOT EXISTS idx_pending_verified_expires
+ON pending_users (verified, expires_at);
+
 -- sample insert
-INSERT INTO pending_users (email, ip_address, token, expires_at) VALUES ('hend@testasd.com', '12.123.123.123', 'hashtoken', NOW() + INTERVAL '5 minutes');
+-- INSERT INTO pending_users (email, ip_address, token, expires_at) VALUES ('hend@testasd.com', '12.123.123.123', 'hashtoken', NOW() + INTERVAL '5 minutes');
 -- sample get pending_users
-select * from pending_users where email = 'hend@testasd.com' and ip_address = '12.123.123.123' and token = 'hashtoken';
+-- select * from pending_users where email = 'hend@testasd.com' and ip_address = '12.123.123.123' and token = 'hashtoken';
 -- sample delete
 -- DELETE from pending_users where email = 'hend@testasd.com' and ip_address = '12.123.123.123' and token = 'hashtoken';
 -- DELETE from pending_users where id = '635d23a9-1276-4377-ab1e-b27012d99ad4';
+SELECT * from pending_users WHERE verified = TRUE AND expires_at < NOW();

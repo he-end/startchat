@@ -11,6 +11,7 @@ import (
 	mdwlogger "github.com/hend41234/startchat/internal/middleware/logger"
 	mdwratelimiter "github.com/hend41234/startchat/internal/middleware/ratelimiter"
 	"github.com/hend41234/startchat/internal/router"
+	_ "github.com/hend41234/startchat/internal/scheduler"
 )
 
 func main() {

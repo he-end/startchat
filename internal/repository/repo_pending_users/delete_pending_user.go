@@ -1,31 +1,46 @@
 package repopendingusers
 
-import "github.com/hend41234/startchat/internal/repository"
+import (
+	"time"
 
-func DeletePendingUsers(email, token string) error {
+	"github.com/hend41234/startchat/internal/logger"
+	"github.com/hend41234/startchat/internal/repository"
+	"go.uber.org/zap"
+)
+
+func DeleterPendingUsersExpired() (bool, error) {
 	tx, err := repository.DB.Begin()
-	defer tx.Commit()
 	if err != nil {
-		return err
+		return false, err
 	}
-	_, err = tx.Exec(queDeletePendingUser, email, token)
+	defer tx.Commit()
+	res, err := tx.Exec(queCleanerPendingUserExpired)
 	if err != nil {
 		defer tx.Rollback()
-		return err
+		return false, err
 	}
-	return nil
+	rows, _ := res.RowsAffected()
+	if rows > 0 {
+		timezone, _ := time.Now().Zone()
+		logger.Info("deleted pending users", zap.Int("lenght", int(rows)), zap.Time(timezone, time.Now()))
+	}
+	return true, nil
 }
 
-func DeletePendingUsers2(email string) error {
+func DeleterPendingUsersVerified() (bool, error) {
 	tx, err := repository.DB.Begin()
+	if err != nil {
+		return false, err
+	}
+	res, err := tx.Exec(queCleanerPendingUserVerified)
+	if err != nil {
+		return false, err
+	}
+	rows, _ := res.RowsAffected()
+	if rows > 0 {
+		timezone, _ := time.Now().Zone()
+		logger.Info("deleted pending users", zap.Int("lenght", int(rows)), zap.Time(timezone, time.Now()))
+	}
 	defer tx.Commit()
-	if err != nil {
-		return err
-	}
-	_, err = tx.Exec(queDeletePendingUser2, email)
-	if err != nil {
-		defer tx.Rollback()
-		return err
-	}
-	return nil
+	return true, nil
 }

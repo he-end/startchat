@@ -31,3 +31,10 @@ func (s NullString) Value() (driver.Value, error) {
 	}
 	return string(s), nil
 }
+
+func (s NullString) String() string {
+	if v, err := s.Value(); v != nil || err != nil {
+		return ""
+	}
+	return string(s)
+}

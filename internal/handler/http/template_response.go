@@ -8,8 +8,8 @@ import (
 	"go.uber.org/zap"
 )
 
-func TemplateResErr(code int, msg string) (byteRes []byte) {
-	res := BaseResponseError{Code: code, ErrorDetail: msg}
+func TemplateRes(code int, msg interface{}, e interface{}) (byteRes []byte) {
+	res := BaseResponseError{Code: code, ErrorDetail: e, Message: msg}
 	byteRes, err := json.Marshal(res)
 	if err != nil {
 		logger.Error("decode template response error", zap.Error(err))

@@ -4,7 +4,6 @@ import "github.com/hend41234/startchat/internal/repository"
 
 func ExistOtpOrder(email string) (ok bool, err error) {
 	tx, err := repository.DB.Begin()
-	defer tx.Commit()
 	if err != nil {
 		return false, err
 	}
@@ -17,6 +16,7 @@ func ExistOtpOrder(email string) (ok bool, err error) {
 			// log.Println("error get data : ", err)
 			return false, err
 		}
+		defer tx.Commit()
 		{
 			return result, nil
 		}
